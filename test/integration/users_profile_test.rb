@@ -19,4 +19,15 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
       assert_match micropost.content, response.body
     end
   end
+
+  test "home stats" do
+    log_in_as(@user)
+    get root_path
+    assert_select '#following', text: "#{@user.following.count}"
+    assert_select '#followers', text: "#{@user.followers.count}"
+
+    get user_path(@user)
+    assert_select '#following', text: "#{@user.following.count}"
+    assert_select '#followers', text: "#{@user.followers.count}"
+  end
 end
